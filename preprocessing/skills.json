@@ -1,0 +1,80 @@
+{
+    "backend": {
+        "python": ["python", "питон", "пайтон"],
+        "java": ["java", "джава", "ява"],
+        "c++": ["c++", "с++", "си++"],
+        "c#": ["c#", "c sharp", "с#", "шарп"],
+        "go": ["go", "го"],
+        "rust": ["rust", "раст"],
+        "scala": ["scala", "скала"],
+        "kotlin": ["kotlin", "котлин"],
+        "django": ["django", "джанго"],
+        "flask": ["flask", "фласк"],
+        "node.js": ["node.js", "nodejs", "нод джс"],
+        "ruby": ["ruby", "руби"],
+        "spring": ["spring", "спринг"],
+        "fastapi": ["fastapi", "фастапи"]
+    },
+    "web": {
+        "javascript": ["javascript", "js", "джаваскрипт"],
+        "typescript": ["typescript", "тайпсткрипт"],
+        "angular": ["angular", "ангуляр"],
+        "react": ["react", "реакт"],
+        "vue.js": ["vue.js", "vue", "вью"],
+        "next.js": ["next.js", "некст"],
+        "wordpress": ["wordpress", "word press"]
+    },
+    "mobile": {
+        "swift" : ["swift", "свифт"],
+        "dart": ["dart", "дарт"],
+        "kotlin": ["kotlin", "котлин"],
+        "ios": ["ios", "айос"],
+        "android": ["android", "андроид"],
+        "flutter": ["flutter", "флаттер"],
+        "react native": ["react native", "реакт натив"]
+    },
+    "devops": {
+        "aws": ["aws", "амазон веб сервис"],
+        "docker": ["docker", "докер"],
+        "kubernetes": ["kubernetes", "k8s", "кубернетис"],
+        "azure": ["azure"],
+        "ansible": ["ansible"],
+        "terraform": ["terraform", "терраформ"],
+        "gcp": ["gcp", "google cloud", "гугл клауд"],
+        "github actions": ["github actions", "гитхаб экшнс"],
+        "ci/cd": ["ci/cd", "ci cd", "continuous integration", "continuous deployment", "непрерывная интеграция", "непрерывное развертывание"]
+    },
+    "data": {
+        "sql" : ["sql"],
+        "mysql": ["mysql"],
+        "nosql" : ["nosql"],
+        "postgresql" : ["postgresql", "postgres", "постгрес"],
+        "mongodb" : ["mongodb", "монго"]
+    },
+    "ml" : {
+        "tensorflow": ["tensorflow", "тензорфлоу"],
+        "pytorch": ["pytorch", "torch", "пайторч", "торч"],
+        "cv": ["cv", "computer vision", "компьютерное зрение"]
+    },
+    "security": {
+        "infosec": ["infosec"],
+        "pentest": ["pentest", "penetration testing", "пентест"],
+        "siem": ["siem"]
+    },
+    "qa": {
+        "jira": ["jira", "джира"],
+        "appium": ["appium"],
+        "jenkins": ["jenkins"],
+        "pytest": ["pytest"],
+        "selenium": ["selenium", "селениум"],
+        "cypress": ["cypress", "сайпрес"],
+        "postman": ["postman", "постман"]
+    },
+    "tools": {
+        "linux": ["linux", "линукс"],
+        "git": ["git", "гит"],
+        "jira": ["jira", "джира"],
+        "bash": ["bash"],
+        "apache": ["apache"]
+    } 
+}

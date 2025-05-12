@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Analytics Dashboard</title>
+  <link rel="stylesheet" href="../static/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <header class="dashboard-header">
+    <h1>📊 Job Market Analytics</h1>
+    <p>Visualizing 1000+ job postings</p>
+  </header>
+
+  <!-- Static Charts (No Filters Needed) -->
+  <section class="chart-group">
+    <h2 class="group-title">General Statistics</h2>
+    <div class="scroll-controls">
+        <button class="scroll-btn left" aria-label="Scroll left">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="currentColor"/>
+            </svg>
+        </button>
+
+        <div class="chart-flex">
+        <div class="chart-card">
+            <h3>Vacancies by City</h3>
+            <div class="chart-wrapper">
+                <canvas id="city-pie-chart" class="chart-container"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>Vacancies by Company (Top 10)</h3>
+            <div class="chart-wrapper">
+                <canvas id="company-bar-chart" class="chart-container"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>Vacancies by Position</h3>
+            <div class="chart-wrapper">
+                <canvas id="position-bar-chart" class="chart-container"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>Average Salary by City</h3>
+            <div class="chart-wrapper">
+                <canvas id="salary-by-city-chart" class="chart-container"></canvas>
+            </div>
+        </div>
+        </div>
+
+        <button class="scroll-btn right" aria-label="Scroll right">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/>
+        </svg>
+        </button>
+    </div>
+  </section>
+
+  <!-- Category-Dependent Charts (With Filter) -->
+  <section class="chart-group">
+    <div class="group-header">
+      <h2 class="group-title">Category Analysis</h2>
+      <div class="category-filter">
+        <label for="category-filter">Select Category:</label>
+        <select id="category-filter">
+          <option value="all">All Categories</option>
+          <!-- Options will be populated by JS -->
+        </select>
+      </div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card wide">
+        <h3>Skills Demand in <span class="category-name">All Categories</span></h3>
+        <div id="skills-by-category-chart" class="chart-container"></div>
+      </div>
+      <div class="chart-card wide">
+        <h3>Salary by City in <span class="category-name">All Categories</span></h3>
+        <div id="salary-city-category-chart" class="chart-container"></div>
+      </div>
+      <div class="chart-card wide">
+        <h3>Salary by Skill in <span class="category-name">All Categories</span></h3>
+        <div id="salary-by-skill-chart" class="chart-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Data fetched from <span id="data-source">API</span> | Last updated: <span id="last-updated">May 2025</span></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
