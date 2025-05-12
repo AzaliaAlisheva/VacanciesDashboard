@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Analytics Dashboard</title>
-  <link rel="stylesheet" href="../static/styles.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
@@ -66,7 +66,7 @@
       <div class="category-filter">
         <label for="category-filter">Select Category:</label>
         <select id="category-filter">
-          <option value="all">All Categories</option>
+          <option value="" selected disabled>Choose Category</option>
           <!-- Options will be populated by JS -->
         </select>
       </div>
@@ -74,15 +74,15 @@
     <div class="chart-grid">
       <div class="chart-card wide">
         <h3>Skills Demand in <span class="category-name">All Categories</span></h3>
-        <div id="skills-by-category-chart" class="chart-container"></div>
+        <canvas id="skills-by-category-chart" class="chart-container"></canvas>
       </div>
       <div class="chart-card wide">
         <h3>Salary by City in <span class="category-name">All Categories</span></h3>
-        <div id="salary-city-category-chart" class="chart-container"></div>
+        <canvas id="salary-city-category-chart" class="chart-container"></canvas>
       </div>
       <div class="chart-card wide">
         <h3>Salary by Skill in <span class="category-name">All Categories</span></h3>
-        <div id="salary-by-skill-chart" class="chart-container"></div>
+        <canvas id="salary-by-skill-chart" class="chart-container"></canvas>
       </div>
     </div>
   </section>

@@ -108,7 +108,8 @@ const chartConfigs = {
           title: {
             display: true,
             text: 'Salary (k RUB)'
-          }
+          },
+          grace: '5%'
         },
         y: {
           grid: {
@@ -118,28 +119,118 @@ const chartConfigs = {
       },
       barPercentage: 0.4,
     }
-  }
+  },
+   // Bar chart for positions
+  skillDemandBar: {
+    type: 'bar',
+    container: 'skills-by-category-chart',
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "% of vacancies in category"
+          },
+          grace: '5%'
+        }
+      }
+    }
+  },
+  salaryCityCategory: {
+    type: 'bar',
+    container: 'salary-city-category-chart',
+    options: {
+      responsive: true,
+      indexAxis: 'y',
+      // maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: 'Salary (k RUB)'
+          },
+          grace: '5%'
+        },
+        y: {
+          grid: {
+            display: false
+          }
+        }
+      },
+      barPercentage: 0.4,
+    }
+  },
+  salarySkillBar: {
+    type: 'bar',
+    container: 'salary-by-skill-chart',
+    options: {
+      responsive: true,
+      indexAxis: 'x',
+      // maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: 'Salary (k RUB)'
+          },
+          grace: '5%'
+        },
+        x: {
+          grid: {
+            display: false
+          }
+        }
+      },
+      barPercentage: 0.4,
+    }
+  },
 };
 
-// Individual chart update functions
-function drawCityPie(cityData) {
-    const config = chartConfigs['cityPie'];
+const charts = {};
+
+function initCharts() {
+  Object.keys(chartConfigs).forEach(chartKey => {
+    const config = chartConfigs[chartKey];
     const ctx = document.getElementById(config.container).getContext('2d');
-    cityPie = new Chart(ctx, {
+    
+    charts[chartKey] = new Chart(ctx, {
       type: config.type,
-      data: { labels:  Object.keys(cityData), 
-        datasets: [{
-            data: Object.values(cityData).map(item => item.count),
-            backgroundColor: getChartColors(Object.keys(cityData).length)
-        }] 
-      }, 
+      data: { labels: [], datasets: [] },
       options: config.options
     });
+  });
 }
 
-function drawCompanyBar(companyData) {
-  const config = chartConfigs['companyBar'];
-  const ctx = document.getElementById(config.container).getContext('2d');
+// Individual chart update functions
+function updateCityPie(cityData) {
+  charts.cityPie.data.labels = Object.keys(cityData);
+  charts.cityPie.data.datasets = [{
+    data: Object.values(cityData).map(item => item.count),
+    backgroundColor: getChartColors(Object.keys(cityData).length)
+  }];
+  charts.cityPie.update();
+}
+
+function updateCompanyBar(companyData) {
   // Sort and get top 10
   const top10 = Object.entries(companyData)
     .sort(([, a], [, b]) => b - a) // Sort descending by value
@@ -149,56 +240,39 @@ function drawCompanyBar(companyData) {
       return acc;
     }, {});
   
-    companyBar = new Chart(ctx, {
-      type: config.type,
-      data: { labels:  Object.keys(top10), 
-        datasets: [{
-            data: Object.values(top10),
-            backgroundColor: '#3a86ff'
-        }] 
-      }, 
-      options: config.options
-    });
+  charts.companyBar.data.labels = Object.keys(top10);
+  charts.companyBar.data.datasets = [{
+    data: Object.values(top10),
+    backgroundColor: '#43aa8b'
+  }];
+  charts.companyBar.update();
 }
 
-function drawPositionBar(positionData) {
-  const config = chartConfigs['positionBar'];
-  const ctx = document.getElementById(config.container).getContext('2d');
-
-  positionBar = new Chart(ctx, {
-      type: config.type,
-      data: { labels:  Object.keys(positionData), 
-        datasets: [{
-            data: Object.values(positionData),
-            backgroundColor: '#8338ec'
-        }] 
-      }, 
-      options: config.options
-    });
+function updatePositionBar(positionData) {
+  charts.positionBar.data.labels = Object.keys(positionData);
+  charts.positionBar.data.datasets = [{
+    data: Object.values(positionData),
+    backgroundColor: '#ff006e'
+  }];
+  charts.positionBar.update();
 }
 
-function drawSalaryCity(cityData) {
-  const config = chartConfigs['salaryCity'];
-    const ctx = document.getElementById(config.container).getContext('2d');
+function updateSalaryCity(cityData) {
+  const filteredCities = Object.fromEntries(
+      Object.entries(cityData).filter(([city, data]) => data.salary !== null)
+  );
 
-    const filteredCities = Object.fromEntries(
-        Object.entries(cityData).filter(([city, data]) => data.salary !== null)
-    );
+  // const sortedCities = Object.fromEntries(
+  //     Object.entries(filteredCities)
+  //         .sort((a, b) => b[1].salary - a[1].salary)
+  // );
 
-    const sortedCities = Object.fromEntries(
-        Object.entries(filteredCities)
-            .sort((a, b) => b[1].salary - a[1].salary)
-    );
-    cityPie = new Chart(ctx, {
-      type: config.type,
-      data: { labels:  Object.keys(sortedCities), 
-        datasets: [{
-            data: Object.values(sortedCities).map(item => item.salary / 1000),
-            backgroundColor: '#ff006e'
-        }] 
-      }, 
-      options: config.options
-    });
+  charts.salaryCity.data.labels = Object.keys(filteredCities);
+  charts.salaryCity.data.datasets = [{
+    data: Object.values(filteredCities).map(item => item.salary / 1000),
+    backgroundColor: '#3a86ff'
+  }];
+  charts.salaryCity.update();
 }
 
 // Helper function for chart colors
@@ -222,10 +296,10 @@ async function fetchGeneralStats() {
     return response.json();
   })
   .then(data => {
-    drawCityPie(data.cities_stats);
-    drawCompanyBar(data.companies_stats);
-    drawPositionBar(data.position_stats);
-    drawSalaryCity(data.cities_stats);
+    updateCityPie(data.cities_stats);
+    updateCompanyBar(data.companies_stats);
+    updatePositionBar(data.position_stats);
+    updateSalaryCity(data.cities_stats);
   })
   .catch(error => {
     console.error('Error fetching JSON:', error);
@@ -242,7 +316,7 @@ async function fetchCategories() {
   })
   .then(data => {
     const categoryFilter = document.getElementById('category-filter');
-    
+
     const categories = Object.keys(data);
     
     categories.forEach(category => {
@@ -257,8 +331,53 @@ async function fetchCategories() {
   });
 }
 
+async function updateSkillDemand(skillData){
+  charts.skillDemandBar.data.labels = Object.keys(skillData);
+  charts.skillDemandBar.data.datasets = [{
+    data: Object.values(skillData).map(item => item * 100),
+    backgroundColor: '#8338ec'
+  }];
+  charts.skillDemandBar.update();
+}
+
+function updateSalaryCityCategory(cityData) {
+  const filteredCities = Object.fromEntries(
+      Object.entries(cityData).filter(([city, data]) => data.salary !== null)
+  );
+
+  const sortedCities = Object.fromEntries(
+      Object.entries(filteredCities)
+          .sort((a, b) => b[1].salary - a[1].salary)
+  );
+
+  charts.salaryCityCategory.data.labels = Object.keys(sortedCities);
+  charts.salaryCityCategory.data.datasets = [{
+    data: Object.values(sortedCities).map(item => item / 1000),
+    backgroundColor: '#3a86ff'
+  }];
+  charts.salaryCityCategory.update();
+}
+
+function updateSalarySkillBar(skillData) {
+  const filteredCities = Object.fromEntries(
+      Object.entries(skillData).filter(([skill, data]) => data.salary !== null)
+  );
+
+  const sortedCities = Object.fromEntries(
+      Object.entries(filteredCities)
+          .sort((a, b) => b[1].salary - a[1].salary)
+  );
+
+  charts.salarySkillBar.data.labels = Object.keys(sortedCities);
+  charts.salarySkillBar.data.datasets = [{
+    data: Object.values(sortedCities).map(item => item / 1000),
+    backgroundColor: '#ff006e'
+  }];
+  charts.salarySkillBar.update();
+}
+
 async function fetchCategoryData(category) {
-  fetch("http://localhost:8000/${category}/stats")
+  fetch(`http://localhost:8000/${category}/stats`)
    .then(response => {
     if (!response.ok) {
       throw new Error('Network response for category fetching was not ok');
@@ -266,6 +385,9 @@ async function fetchCategoryData(category) {
     return response.json();
   })
   .then(data => {
+    updateSkillDemand(data.skill_demand);
+    updateSalaryCityCategory(data.city_salary);
+    updateSalarySkillBar(data.skill_salary);
     console.log(data)
   })
   .catch(error => {
@@ -286,13 +408,16 @@ document.getElementById('category-filter').addEventListener('change', function()
   
   updateCategoryName(selectedCategory);
   
+  fetchCategoryData(selectedCategory);
   // Here you would also call your chart update functions
   // updateSkillsChart(selectedCategory);
   // updateSalaryByCityChart(selectedCategory);
   // updateSalaryBySkillChart(selectedCategory);
 });
 
+
 fetchGeneralStats();
 fetchCategories();
+initCharts();
 updateCategoryName("All Categories");
 

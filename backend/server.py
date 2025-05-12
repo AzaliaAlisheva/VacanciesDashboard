@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import random
 from datetime import datetime
@@ -10,12 +10,12 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend development
 
 # database
-with open("../preprocessing/extended_data.csv", "r") as input:
-    with open("../preprocessing/skills.json", 'r') as skills_file:
+with open("extended_data.csv", "r") as input:
+    with open("skills.json", 'r') as skills_file:
         SKILLS = json.load(skills_file)
         data = pd.read_csv(input)
 
-def category_stats(category):
+def skill_demand(category):
     skill_persentage = {}
     category_data = data[data['category'].apply(lambda x: category in x if pd.notnull(x) else False)]
     for skill in SKILLS[category].keys():
@@ -44,44 +44,47 @@ def salary_by_skill(category):
             skill_salary[skill] = round(res)
     return dict(sorted(skill_salary.items(), key=lambda item: item[1], reverse=True))
 
+def position_stats():
+    position_num = {}
+    for position in ['intern', 'junior', 'middle', 'senior']:
+        position_data = data[data['position'].apply(lambda x: position in x if pd.notnull(x) else False)]
+        position_num[position] = position_data.shape[0]
+    return position_num
+    
 @app.route('/skills', methods=['GET'])
 def get_categories():
     return jsonify(SKILLS)
 
 
 @app.route('/general/stats', methods=['GET'])
-def general_stats():
-    with open('general_stats.json') as gen_file:
-        return jsonify(json.load(gen_file))
+def get_general_stats():
+    counts = data['location'].value_counts()
+    salaries = salary_by_city(data)
+    cities_info = pd.DataFrame({'count': counts, 'salary': salaries}).replace({np.nan:None})
+    company_info = data['company'].value_counts().head(20)
+    company_info = company_info.rename(index={
+        'Уральский центр систем безопасности': 'УЦСБ'
+    })
+    position_info = position_stats()
+    res = {
+        'cities_stats': cities_info.to_dict(orient="index"),
+        'companies_stats': company_info.to_dict(),
+        'position_stats': position_info
+    }
+
+    return jsonify(res)
 
 @app.route('/<category>/stats', methods=['GET'])
-def category_stats(category):
+def get_category_stats(category):
     return jsonify({
-        "skill_persentage": category_stats(category),
+        "skill_demand": skill_demand(category),
         "city_salary": salary_by_city_in_category(category).to_dict(),
         "skill_salary": salary_by_skill(category),
     })
 
 # @app.route('/jobs', methods=['GET'])
 # def get_jobs():
-#     category = request.args.get('category', 'all')
-#     count = int(request.args.get('count', 100))
-    
-#     # Generate mock jobs
-#     jobs = []
-#     for _ in range(count):
-#         job_category = category if category != 'all' else random.choice(categories)
-#         jobs.append({
-#             "id": random.randint(1000, 9999),
-#             "title": f"{job_category.capitalize()} Developer",
-#             "company": random.choice(companies),
-#             "city": random.choice(cities),
-#             "salary": random.randint(30000, 120000),
-#             "skills": random.sample(skills_db.get(job_category, []), min(3, len(skills_db.get(job_category, [])))),
-#             "date_posted": datetime.now().strftime("%Y-%m-%d")
-#         })
-    
-#     return jsonify(jobs)
+#    return jsonify(jobs)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run('0.0.0.0', port=8000)
