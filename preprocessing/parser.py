@@ -55,6 +55,6 @@ result = []
 for id in city_ids:
     result.extend(parse_hh(id, 200))
 df = pd.DataFrame(result)
-with open("hh_jobs.csv", "w") as file:
+with open("hh_jobs.csv", "w", encoding='utf-8') as file:
     df.to_csv(file, index=False)
 

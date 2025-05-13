@@ -10,8 +10,8 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend development
 
 # database
-with open("extended_data.csv", "r") as input:
-    with open("skills.json", 'r') as skills_file:
+with open("extended_data.csv", "r", encoding='utf-8') as input:
+    with open("skills.json", 'r', encoding='utf-8') as skills_file:
         SKILLS = json.load(skills_file)
         data = pd.read_csv(input)
 

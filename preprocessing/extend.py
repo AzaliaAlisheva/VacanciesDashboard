@@ -123,13 +123,13 @@ def preprocess_df (df):
     result = result.fillna(df['company'])
     df['company'] = result
 
-with open("hh_jobs.csv", "r") as input:
-    with open("../backend/skills.json", "r") as skills_file:
+with open("hh_jobs.csv", "r", encoding='utf-8') as input:
+    with open("../backend/skills.json", "r", encoding='utf-8') as skills_file:
         SKILLS = json.load(skills_file)
         data = pd.read_csv(input)
         str_cols = ['responsibilities', 'requirements'] 
         data[str_cols] = data[str_cols].fillna('')
         preprocess_df(data)
 
-    with open("../backend/extended_data.csv", "w") as output:
+    with open("../backend/extended_data.csv", "w", encoding='utf-8') as output:
         data.to_csv(output, index=False)

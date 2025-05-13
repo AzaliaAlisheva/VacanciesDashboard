@@ -288,7 +288,7 @@ function getChartColors(count) {
 }
 
 async function fetchGeneralStats() {
-  fetch('http://localhost:8000/general/stats')
+  fetch('/general/stats')
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response for general stats fetching was not ok');
@@ -307,7 +307,7 @@ async function fetchGeneralStats() {
 }
 
 async function fetchCategories() {
-  fetch('http://localhost:8000/skills')
+  fetch('/skills')
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response for skill fetching was not ok');
@@ -377,7 +377,7 @@ function updateSalarySkillBar(skillData) {
 }
 
 async function fetchCategoryData(category) {
-  fetch(`http://localhost:8000/${category}/stats`)
+  fetch(`/${category}/stats`)
    .then(response => {
     if (!response.ok) {
       throw new Error('Network response for category fetching was not ok');
@@ -388,7 +388,6 @@ async function fetchCategoryData(category) {
     updateSkillDemand(data.skill_demand);
     updateSalaryCityCategory(data.city_salary);
     updateSalarySkillBar(data.skill_salary);
-    console.log(data)
   })
   .catch(error => {
     console.error('Error fetching JSON:', error);
